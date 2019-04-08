@@ -2,3 +2,5 @@ pyTelegramBotAPI
 requests
 gunicorn
 PySocks
+psycopg2
+psycopg2-binary
