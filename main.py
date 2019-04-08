@@ -1,46 +1,26 @@
 import telebot
-import psycopg2
+
+from entities.requests import Requests
+from entities.user import User
 
 from config import Config
-from config import DatabaseConfig
-
-from User import User
-from Requests import Requests
-
 
 bot = telebot.TeleBot(Config.TOKEN)
 
 telebot.apihelper.proxy = {Config.PROXY_PROTOCOL : Config.PROXY_IP}
 
-conn = psycopg2.connect(dbname=DatabaseConfig.DATABASE, user=DatabaseConfig.USER,
-							password=DatabaseConfig.PASSWORD, host=DatabaseConfig.HOST)
-cursor = conn.cursor()
 
-
-def connect():
-	conn = psycopg2.connect(dbname=DatabaseConfig.DATABASE, user=DatabaseConfig.USER,
-							password=DatabaseConfig.PASSWORD, host=DatabaseConfig.HOST)
-	cursor = conn.cursor()
-
-
-def disconnect():
-	cursor.close()
-	conn.close()
-
-
-@bot.message_handler(commands=['start', 'help'])
+@bot.message_handler(commands=['start'])
 def send_welcome(message):
-	bot.reply_to(message, "Здорова")
+	user = User(message.from_user.id)
+	sap_user = Requests.get_user(user)
 
+	if not sap_user:
+		Requests.insert_user(user)
 
-@bot.message_handler(commands=['users'])
-def send_user_list(message):
-	connect()
-	new_user = User(1, 'ASOLOBUTO00', 'test11')
-	result = Requests.get_user_by_logpass(new_user, cursor)
-	print(result)
-	disconnect()
-	bot.reply_to(message, "Прочитано")
+	print(sap_user)
+
+	pass
 
 
 bot.polling()
