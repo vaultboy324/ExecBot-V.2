@@ -22,6 +22,14 @@ class User:
         return self.__uname
 
     def get_password(self):
+        return self.__password
+
+    def create_new_user(self, id):
+        if self.get_id() == 0:
+            self.set_id(id)
+        pass
+
+    def __get_encode_password(self):
         return self.__decrypt(self.__password)
 
     def __encrypt(self, string):

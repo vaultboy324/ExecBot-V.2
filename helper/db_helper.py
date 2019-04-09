@@ -1,6 +1,7 @@
 import sqlite3
 from config import Config
 
+
 class DBHelper:
 
     @staticmethod
@@ -11,6 +12,7 @@ class DBHelper:
     def disconnect_from_db(conn, cursor):
         cursor.close()
         conn.close()
+
 
 class DBRequest:
     _cursor = None
