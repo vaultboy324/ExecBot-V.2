@@ -11,7 +11,7 @@ telebot.apihelper.proxy = {Config.PROXY_PROTOCOL : Config.PROXY_IP}
 
 user_instance = User(0)
 user_instance.set_uname("")
-user_instance.set_password("")
+user_instance.set_initial_password()
 
 
 @bot.message_handler(commands=['start'])
@@ -22,7 +22,9 @@ def send_welcome(message):
 	if not sap_user:
 		bot.reply_to(message, "Введите ваш uname")
 	else:
-		bot.reply_to(message, f"Вы авторизованы под uname'ом {user_instance.get_uname()}")
+		user_instance.create_user_by_response(sap_user)
+		bot.reply_to(message, f"Вы авторизованы под uname'ом {user_instance.get_uname()}\n"
+		f"Ваш пароль: {user_instance.get_encode_password()}")
 
 	print(sap_user)
 

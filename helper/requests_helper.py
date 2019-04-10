@@ -14,7 +14,7 @@ class RequestsHelper:
     @staticmethod
     def insert_user(user: User, request: DBRequest):
         cursor = request.get_cursor()
-        cursor.execute(f"INSERT INTO users VALUES ('{user.get_id()}', '{user.get_uname()}', '{user.get_password()}')")
+        cursor.execute(f"INSERT INTO users VALUES ('{user.get_id()}', '{user.get_uname()}', '{user.get_password().decode()}')")
 
     @staticmethod
     def update_uname(user:  User, request: DBRequest):
@@ -24,7 +24,7 @@ class RequestsHelper:
     @staticmethod
     def update_password(user: User, request: DBRequest):
         cursor = request.get_cursor()
-        cursor.execute(f"UPDATE users SET password = '{user.get_password()}' WHERE _id = '{user.get_id()}'")
+        cursor.execute(f"UPDATE users SET password = '{user.get_password().decode()}' WHERE _id = '{user.get_id()}'")
 
     @staticmethod
     def delete_user(user: User, request: DBRequest):
