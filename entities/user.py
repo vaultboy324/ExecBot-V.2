@@ -42,6 +42,34 @@ class User:
     def get_encode_password(self):
         return self.__decrypt(self.__password).decode()
 
+    def set_role(self, role):
+        self.role = role
+        pass
+
+    def get_role(self):
+        return self.role
+
+    def set_task_list(self, tasks):
+        self.task_list = []
+
+        for task in tasks:
+            self.__add_task_to_list(task)
+
+        pass
+
+    def get_task_list(self):
+        return self.task_list
+
+    def set_task_time(self, index, time):
+        self.task_list[index] = time
+
+    def __add_task_to_list(self, task):
+        current_task = {}
+        current_task["task"] = task["task"]
+        current_task["time"] = task["time"]
+        self.task_list.push(current_task)
+
+
     def __encrypt(self, string):
         key = Crypt_helper.get_hash_key()
         code_string = Crypt_helper.encrypt_string(string.encode(), key.encode());

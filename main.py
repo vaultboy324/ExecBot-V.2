@@ -3,6 +3,12 @@ import telebot
 from entities.requests import Requests
 from entities.user import User
 
+import requests
+from requests.auth import HTTPDigestAuth
+
+import pyodata
+from pyodata.v2.service import GetEntitySetFilter
+
 from config import Config
 
 bot = telebot.TeleBot(Config.TOKEN)
@@ -57,6 +63,18 @@ def reset(message):
 def get_status(message):
 	user_instance.create_new_user(message.from_user.id)
 	if Requests.check_user(user_instance):
+		SERVICE_URL = 'https://ts.execution.su/ts/index.html?sap-client=150&sap-language=RU#/Timesheet'
+		session = requests.Session()
+		session.auth = ("ASOLOBUTO", "test11")
+		session.headers.update({
+			'x-test': 'true'
+		})
+		#session.get(SERVICE_URL, headers={'x-test2': 'true'})
+		client = pyodata.Client(SERVICE_URL, session)
+		project_list = client.entity_sets.MyProjectListSet.get_enities().select("ProjText")
+		for project in project_list:
+			print(project)
+
 		bot.reply_to(message, "На данный момент времени - это всё, что я могу(")
 		return
 	if not user_instance.get_uname():
